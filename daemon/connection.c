@@ -67,8 +67,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				if (verify_pass(buffer))
 				{
 					daemon->client_authenticated[i] = 1;
-					const char *prompt = "-> ";
-					send(client_fd, prompt, strlen(prompt), 0);
+					display_prompt(client_fd);
 				}
 				else
 				{
@@ -93,11 +92,15 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 					return ;
 				}
 				else if (!strcmp(buffer, "users"))
+				{
 					send_cmd_output("who", client_fd);
+					display_prompt(client_fd);
+				}
 				else if (!strcmp(buffer, "system"))
 				{
 					send_cmd_output("uname -a", client_fd);
 					send_cmd_output("uptime", client_fd);
+					display_prompt(client_fd);
 				}
 				else if (!strcmp(buffer, "quit"))
 				{
@@ -105,10 +108,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 					break ;
 				}
 				else
-				{
-					const char *prompt = "-> ";
-					send(client_fd, prompt, strlen(prompt), 0);
-				}
+					display_prompt(client_fd);
 			}
 		}
 	}

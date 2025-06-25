@@ -3,7 +3,7 @@
 void print_usage(int client_fd)
 {
 	const char *usage =
-		"ft_shield:\n"
+		"ft_shield usage:\n"
 		"  ?           : Show this help message.\n"
 		"  shell       : Spawn a shell on port 4242.\n"
 		"  users       : List currently logged in users.\n"
@@ -11,6 +11,7 @@ void print_usage(int client_fd)
 		"  quit        : Exit the daemon.\n";
 
 	send(client_fd, usage, strlen(usage), 0);
+	display_prompt(client_fd);
 }
 
 void	spawn_shell(t_shield *daemon, int client_fd)
@@ -94,4 +95,11 @@ void	send_cmd_output(const char *cmd, int client_fd)
 	while (fgets(buffer, sizeof(buffer), fp))
 		send(client_fd, buffer, strlen(buffer), 0);
 	pclose(fp);
+	send(client_fd, "\n", 1, 0);
+}
+
+void	display_prompt(int client_fd)
+{
+	const char *prompt = "-> ";
+	send(client_fd, prompt, strlen(prompt), 0);
 }

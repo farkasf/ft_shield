@@ -54,5 +54,6 @@ int		verify_pass(const char *pass);
 void	spawn_shell(t_shield *daemon, int client_fd);
 void	print_usage(int client_fd);
 void	send_cmd_output(const char *cmd, int client_fd);
+void	display_prompt(int client_fd);
 
 #endif
