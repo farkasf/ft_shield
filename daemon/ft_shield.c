@@ -9,6 +9,8 @@ int	shield_init(t_shield *daemon)
 	daemon->listen_fd = -1;
 	daemon->client_count = 0;
 	daemon->stop_flag = 0;
+	daemon->bytes_in = 0;
+	daemon->bytes_out = 0;
 
 	for (int i = 0; i < MAX_CLIENTS; i++)
 	{

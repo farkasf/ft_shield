@@ -23,12 +23,14 @@
 
 typedef struct
 {
-	int lock_fd;
-	int listen_fd;
-	int client_fds[MAX_CLIENTS];
-	int client_authenticated[MAX_CLIENTS];
-	int client_count;
-	int stop_flag;
+	int		lock_fd;
+	int		listen_fd;
+	int		client_fds[MAX_CLIENTS];
+	int		client_authenticated[MAX_CLIENTS];
+	int		client_count;
+	int		stop_flag;
+	size_t	bytes_in;
+	size_t	bytes_out;
 } t_shield;
 
 extern volatile sig_atomic_t g_signal;
@@ -52,8 +54,9 @@ void	close_all_clients(t_shield *daemon);
 int		verify_pass(const char *pass);
 
 void	spawn_shell(t_shield *daemon, int client_fd);
-void	print_usage(int client_fd);
-void	send_cmd_output(const char *cmd, int client_fd);
-void	display_prompt(int client_fd);
+void 	print_usage(int client_fd, t_shield *daemon);
+void	send_sys_output(const char *cmd, int client_fd, t_shield *daemon);
+void	display_prompt(int client_fd, t_shield *daemon);
+void	display_stats(int client_fd, t_shield *daemon, int client_id);
 
 #endif
