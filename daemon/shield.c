@@ -1,4 +1,4 @@
-#include "ft_shield.h"
+#include "shield.h"
 
 int	shield_init(t_shield *daemon)
 {
@@ -66,8 +66,7 @@ int	verify_pass(const char *pass)
 	if (!pass)
 		return (0);
 
-	unsigned int master = 333421560U; // "durex42"
 	unsigned int input = ft_hash(pass);
 
-	return (input == master);
+	return (input == MASTER);
 }

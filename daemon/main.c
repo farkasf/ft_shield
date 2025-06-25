@@ -1,4 +1,4 @@
-#include "ft_shield.h"
+#include "shield.h"
 
 volatile sig_atomic_t g_signal = 0;
 
@@ -9,9 +9,8 @@ int	main(void)
 	
 	t_shield daemon;
 
-	if (shield_init(&daemon) != 0) {
+	if (shield_init(&daemon) != 0)
 		return (EXIT_FAILURE);
-	}
 	shield_run(&daemon);
 	shield_destroy(&daemon);
 

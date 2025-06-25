@@ -1,4 +1,4 @@
-#include "ft_shield.h"
+#include "shield.h"
 
 void	signal_handler(int sig)
 {

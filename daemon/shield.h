@@ -18,8 +18,9 @@
 
 # define MAX_CLIENTS 3
 # define BUFFER_SIZE 4242
-# define LOCK_PATH "/var/lock/shield.lock"
+# define LOCK_PATH "/var/lock/service.lock"
 # define PORT 4242
+# define MASTER 333421560U
 
 typedef struct
 {
