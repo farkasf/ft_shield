@@ -1,4 +1,4 @@
-#include "shield.h"
+#include "../inc/ft_daemon.h"
 
 int	create_lock_file(t_shield *daemon)
 {

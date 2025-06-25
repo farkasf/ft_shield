@@ -1,5 +1,5 @@
-#ifndef SHIELD_H
-# define SHIELD_H
+#ifndef FT_DAEMON_H
+# define FT_DAEMON_H
 
 # include <stdio.h>
 # include <stdlib.h>

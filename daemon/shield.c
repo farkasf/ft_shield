@@ -1,4 +1,4 @@
-#include "shield.h"
+#include "../inc/ft_daemon.h"
 
 int	shield_init(t_shield *daemon)
 {
