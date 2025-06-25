@@ -15,12 +15,11 @@ static void	handle_new_connection(t_shield *daemon, fd_set *read_fds)
 			daemon->stop_flag = 1;
 			return ;
 		}
-
 		if (daemon->client_count < MAX_CLIENTS)
 		{
 			daemon->client_fds[daemon->client_count] = client_fd;
 			daemon->client_authenticated[daemon->client_count] = 0;
-			const char *prompt = "-> pass: ";
+			const char *prompt = ">_ passcode: ";
 			send(client_fd, prompt, strlen(prompt), 0);
 			daemon->client_count++;
 		}

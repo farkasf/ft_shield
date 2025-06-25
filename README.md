@@ -5,7 +5,7 @@ This project will make you code a simple trojan horse.
 - [x] convert matt_daemon base project from CPP to C
 - [x] test the daemon and debug listening on port 4242
 - [x] add auth with custom hashing
-- [ ] spawn a root shell using the daemon
+- [x] spawn a root shell using the daemon
 - [ ] copy the compiled daemon into `/bin`
 - [ ] create a startup hook (`init.d` or `systemd`)
 
