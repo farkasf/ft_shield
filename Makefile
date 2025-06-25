@@ -1,4 +1,6 @@
 TARGET = ft_shield
+DAEMON = ./daemon/shield_daemon
+PAYLOAD = ./inc/shield_daemon.h
 CC = cc
 FLAGS = -Wall -Wextra -Werror
 
@@ -9,25 +11,34 @@ DAEMON_SRC =	./daemon/main.c \
 				./daemon/daemon.c \
 				./daemon/connection.c \
 				./daemon/shell.c
+TARGET_SRC =	ft_shield.c
 
 DAEMON_OBJ = $(DAEMON_SRC:.c=.o)
+TARGET_OBJ = $(TARGET_SRC:.c=.o)
 DAEMON_HDR = ./inc/ft_daemon.h
+TARGET_HDR = ./inc/ft_shield.h
 
 INC = -Iinc
 
-all: $(TARGET)
+all: $(DAEMON) $(PAYLOAD) $(TARGET)
 
-$(TARGET): $(DAEMON_OBJ)
-	$(CC) $(DAEMON_OBJ) -o $(TARGET)
+$(DAEMON): $(DAEMON_OBJ)
+	$(CC) $(DAEMON_OBJ) -o $(DAEMON)
 
-%.o: %.c $(DAEMON_HDR)
+$(PAYLOAD): $(DAEMON)
+	xxd -i $(DAEMON) > $(PAYLOAD)
+
+$(TARGET): $(TARGET_OBJ)
+	$(CC) $(TARGET_OBJ) -o $(TARGET)
+
+%.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@ $(INC)
 
 clean:
-	rm -f $(DAEMON_OBJ) $(TARGET)
+	rm -f $(DAEMON_OBJ) $(TARGET_OBJ)
 
 fclean: clean
-	rm -f $(TARGET)
+	rm -f $(DAEMON) $(PAYLOAD) $(TARGET)
 
 re: fclean all
 
