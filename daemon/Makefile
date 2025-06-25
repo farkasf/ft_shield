@@ -1,7 +1,7 @@
 TARGET = ft_shield
 CC = cc
 FLAGS = -Wall -Wextra -Werror
-SRC = main.c ft_shield.c signal_handler.c lock_file.c daemon.c connection.c
+SRC = main.c ft_shield.c signal_handler.c lock_file.c daemon.c connection.c shell.c
 OBJ = $(SRC:.c=.o)
 INC = -I.
 HDR = ft_shield.h
