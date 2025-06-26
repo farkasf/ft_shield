@@ -63,7 +63,9 @@ void start_service(void)
 	}
 	close(fd);
 	system("chmod +x /etc/init.d/ft_shield");
+	system("systemctl daemon-reload");
 	system("systemctl enable ft_shield");
+	system("systemctl start ft_shield");
 }
 
 int	main()

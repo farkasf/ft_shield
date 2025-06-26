@@ -42,4 +42,16 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+check_root:
+	@if [ $$(id -u) -ne 0 ]; then \
+		echo "user must be root"; \
+		exit 1; \
+	fi
+
+syspurge: check_root fclean
+	rm -f /var/lock/service.lock
+	rm -f /bin/ft_shield
+	rm -f /etc/init.d/ft_shield
+	systemctl daemon-reload || true
+
+.PHONY: all clean fclean re check_root syspurge
