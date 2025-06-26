@@ -1,6 +1,6 @@
 TARGET = ft_shield
-DAEMON = ./daemon/shield_daemon
-PAYLOAD = ./inc/shield_daemon.h
+DAEMON = ./daemon/shield_payload
+PAYLOAD = ./inc/payload.h
 CC = cc
 FLAGS = -Wall -Wextra -Werror
 
