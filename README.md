@@ -7,7 +7,7 @@ This project will make you code a simple trojan horse.
 - [x] add auth with custom hashing
 - [x] spawn a root shell using the daemon
 - [x] copy the compiled daemon into `/bin`
-- [ ] create a startup hook (`init.d` or `systemd`)
+- [x] create a startup hook (`systemd`)
 
 ## resources
 - https://lloydrochester.com/post/c/unix-daemon-example/?utm_source=chatgpt.com

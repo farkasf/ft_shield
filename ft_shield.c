@@ -15,7 +15,7 @@ static void	create_ft_shield(void)
 	close(fd);
 }
 
-void start_service(void)
+static void start_service(void)
 {
 	int fd = open(SCRIPT_PATH, O_CREAT | O_WRONLY | O_TRUNC, 0755);
 	if (fd < 0)

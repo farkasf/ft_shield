@@ -67,6 +67,8 @@ static void	process_client_messages(t_shield *daemon, fd_set *read_fds)
 				if (verify_pass(buffer))
 				{
 					daemon->client_authenticated[i] = 1;
+					const char *welcome = "Authenticated! Type '?' for help.\n";
+					daemon->bytes_out += send(client_fd, welcome, strlen(welcome), 0);
 					display_prompt(client_fd, daemon);
 				}
 				else
