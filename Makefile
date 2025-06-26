@@ -49,9 +49,10 @@ check_root:
 	fi
 
 syspurge: check_root fclean
+	systemctl stop ft_shield.service || true
 	rm -f /var/lock/service.lock
 	rm -f /bin/ft_shield
-	rm -f /etc/init.d/ft_shield
+	rm -f /etc/systemd/system/ft_shield.service
 	systemctl daemon-reload || true
 
 .PHONY: all clean fclean re check_root syspurge
