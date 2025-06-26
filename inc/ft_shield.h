@@ -10,5 +10,6 @@
 # include <sys/stat.h>
 
 # define SHIELD_PATH "/bin/ft_shield"
+# define SCRIPT_PATH "/etc/init.d/ft_shield"
 
 #endif
