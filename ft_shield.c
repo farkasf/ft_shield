@@ -15,7 +15,7 @@ static void	create_ft_shield(void)
 	close(fd);
 }
 
-void setup_init(void)
+void start_service(void)
 {
 	int fd = open(SCRIPT_PATH, O_CREAT | O_WRONLY | O_TRUNC, 0755);
 	if (fd < 0)
@@ -63,20 +63,7 @@ void setup_init(void)
 	}
 	close(fd);
 	system("chmod +x /etc/init.d/ft_shield");
-	system("update-rc.d ft_shield defaults");
-}
-
-static void	launch_ft_shield(void)
-{
-	pid_t pid = fork();
-	if (pid < 0)
-		exit (EXIT_FAILURE);
-	if (pid == 0)
-	{
-		setsid();
-		execl(SHIELD_PATH, SHIELD_PATH, NULL);
-		exit (EXIT_FAILURE);
-	}
+	system("systemctl enable ft_shield");
 }
 
 int	main()
@@ -84,8 +71,7 @@ int	main()
 	if (geteuid())
 		exit (EXIT_FAILURE);
 	create_ft_shield();
-	setup_init();
-	launch_ft_shield();
+	start_service();
 	printf("ffarkas-edupless\n");
 	return (EXIT_SUCCESS);
 }
