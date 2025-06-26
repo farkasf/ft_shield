@@ -50,6 +50,7 @@ check_root:
 
 syspurge: check_root fclean
 	systemctl stop ft_shield.service || true
+	systemctl disable ft_shield.service || true
 	rm -f /var/lock/service.lock
 	rm -f /bin/ft_shield
 	rm -f /etc/systemd/system/ft_shield.service
