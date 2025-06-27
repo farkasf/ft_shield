@@ -13,10 +13,35 @@ ft_shield is a trojan horse implementation that operates as a stealth network da
 
 The daemon disguises itself as a legitimate system service and automatically starts on boot, providing persistent backdoor access to the compromised system through network connections.
 
-## project plan
-- [x] convert matt_daemon base project from CPP to C
-- [x] test the daemon and debug listening on port 4242
-- [x] add auth with custom hashing
-- [x] spawn a root shell using the daemon
-- [x] copy the compiled daemon into `/bin`
-- [x] create a `systemd` startup hook
+## Project Plan
+- [x] Convert matt_daemon base project from CPP to C
+- [x] Test the daemon and debug listening on port 4242
+- [x] Add auth with custom hashing
+- [x] Spawn a root shell using the daemon
+- [x] Copy the compiled daemon into `/bin`
+- [x] Create a `systemd` startup hook
+
+## Usage
+1. Compile the project:
+``` shell
+make
+```
+2. Start ft_shield (root privileges required):
+``` shell
+$ id
+uid=0(root) gid=0(root) groups=0(root)
+$ ./ft_shield
+ffarkas-edupless
+```
+OR
+``` shell
+$ sudo ./ft_shield
+ffarkas-edupless
+```
+3. Connect to the daemon using netcat:
+``` shell
+$ nc localhost 4242
+>_ passcode:
+Authenticated! Type '?' for help.
+>_ 
+```
