@@ -45,3 +45,38 @@ $ nc localhost 4242
 Authenticated! Type '?' for help.
 >_ 
 ```
+
+## Testing
+1. Check for daemon binary and lock file existence:
+``` shell
+$ ls /bin | grep ft_shield
+$ ls /var/lock | grep service.lock
+```
+2. Verify that the daemon is running and listening on port 4242:
+``` shell
+$ ps aux | grep ft_shield
+$ sudo netstat -tulpn 4242
+```
+3. Test client interaction:
+``` shell
+$ nc localhost 4242
+>_ passcode:
+Authenticated! Type '?' for help.
+>_ ?
+=== ft_shield usage ===
+  ?           : Show this help message.
+  shell       : Spawn a shell on port 4242.
+  users       : List currently logged in users.
+  system      : Display system information.
+  stats       : Show I/O statistics for the daemon.
+  quit        : Stop the daemon.
+>_ 
+```
+4. Test connection limit:
+  - Connect 3 clients (should succeed)
+  - Connect a 4th client (should be rejected)
+
+## Cleanup
+``` shell
+sudo make syspurge
+```
