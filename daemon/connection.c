@@ -24,7 +24,11 @@ static void	handle_new_connection(t_shield *daemon, fd_set *read_fds)
 			daemon->client_count++;
 		}
 		else
+		{
+			const char *max_msg = "Denied: Max. connections reached\n";
+			daemon->bytes_out += send(client_fd, max_msg, strlen(max_msg), 0);
 			close(client_fd);
+		}
 	}
 }
 
