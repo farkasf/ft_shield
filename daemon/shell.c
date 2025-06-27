@@ -3,7 +3,7 @@
 void print_usage(int client_fd, t_shield *daemon)
 {
 	const char *usage =
-		"ft_shield usage:\n"
+		"=== ft_shield usage ===\n"
 		"  ?           : Show this help message.\n"
 		"  shell       : Spawn a shell on port 4242.\n"
 		"  users       : List currently logged in users.\n"
